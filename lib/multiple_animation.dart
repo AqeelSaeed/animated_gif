@@ -117,7 +117,7 @@ class _CircularScaleInRotateImagesScreenState
     // Slide animation for the text from top to its original position
     _textSlideAnimation = Tween<Offset>(
       begin: const Offset(0, -3), // Start far above the screen
-      end: const Offset(0, 22.5), // End at original position in the center
+      end: const Offset(0, 25.5), // End at original position in the center
     ).animate(
       CurvedAnimation(parent: _slidController, curve: Curves.easeInOut),
     );

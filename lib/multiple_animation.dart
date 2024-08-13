@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:typed_data';
@@ -34,6 +35,7 @@ class _CircularScaleInRotateImagesScreenState
   late Animation<double> _scaleAnimation;
 
   List<Uint8List> _images = []; // List to hold image byte data
+  ByteData? bytesData;
 
   @override
   void initState() {
@@ -63,7 +65,7 @@ class _CircularScaleInRotateImagesScreenState
     _rotateAnimation = CurvedAnimation(
       parent: _rotateController,
       curve: Curves.easeInOut,
-    ).drive(Tween<double>(begin: 0, end: 2 * pi));
+    ).drive(Tween<double>(begin: 0, end: -2 * pi));
 
     // Start the scale-in animations
     _startScaleInAnimations();
@@ -107,7 +109,7 @@ class _CircularScaleInRotateImagesScreenState
     // Slide animation for the box from bottom to its original position
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, -1), // Start from the bottom
-      end: const Offset(0, 0.3), // End at original position
+      end: const Offset(0, 0.1), // End at original position
     ).animate(
       CurvedAnimation(parent: _slidController, curve: Curves.easeInOut),
     );
@@ -115,7 +117,7 @@ class _CircularScaleInRotateImagesScreenState
     // Slide animation for the text from top to its original position
     _textSlideAnimation = Tween<Offset>(
       begin: const Offset(0, -3), // Start far above the screen
-      end: const Offset(0, 27), // End at original position in the center
+      end: const Offset(0, 22.5), // End at original position in the center
     ).animate(
       CurvedAnimation(parent: _slidController, curve: Curves.easeInOut),
     );
@@ -137,9 +139,10 @@ class _CircularScaleInRotateImagesScreenState
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    double horizontalRadius = 500; // Horizontal radius for the oval path
+    double horizontalRadius = 350; // Horizontal radius for the oval path
     double verticalRadius = 250;   // Vertical radius for the oval path
     double diameter = 2 * (horizontalRadius + 150); // Adjust diameter to fit the entire oval
 
@@ -165,12 +168,12 @@ class _CircularScaleInRotateImagesScreenState
                           alignment: Alignment.center,
                           child: Stack(
                             children: List.generate(6, (index) {
-                              double angle = (2 * pi / 6) * index - _rotateAnimation.value;
-                              double x = horizontalRadius * cos(angle) + horizontalRadius - 100; // Adjust x position for oval
-                              double y = verticalRadius * sin(angle) + verticalRadius - 100;     // Adjust y position for oval
+                              double angle = -(2 * pi / 6) * index + _rotateAnimation.value;
+                              double x = horizontalRadius * cos(angle) + horizontalRadius - 100;
+                              double y = verticalRadius * sin(angle) + verticalRadius - 100;
                               return Positioned(
                                 left: x + 80,
-                                top: y + 100,
+                                top: y + 30,
                                 child: ScaleTransition(
                                   scale: _scaleAnimations[index],
                                   child: Image.memory(
@@ -186,6 +189,7 @@ class _CircularScaleInRotateImagesScreenState
                       },
                     ),
                   ),
+
                   AbsorbPointer(
                     absorbing: true,
                     child: Align(
@@ -207,76 +211,7 @@ class _CircularScaleInRotateImagesScreenState
                               ),
                               lightConfig: const LightConfig(disable: true, color: Colors.transparent),
                               shadowConfig: const ShadowConfig(disable: true , color: Colors.transparent),
-                              childLayout: const ChildLayout(
-                                  inner: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        TiltParallax(
-                                          filterQuality: FilterQuality.none,
-                                          size: Offset(5,-4),
-                                          child: Text('MIX&',
-                                              style: TextStyle(color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'FjallaOne',
-                                                  fontSize: 105
-                                              )),
-                                        ),
-                                        TiltParallax(
-                                          filterQuality: FilterQuality.none,
-                                          size: Offset(5,-4),
-                                          child: Text('MATCH!',
-                                              style: TextStyle(color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'FjallaOne',
-                                                  fontSize: 104
-                                              )),
-                                        ),
-                                        TiltParallax(
-                                          filterQuality: FilterQuality.none,
-                                          size: Offset(5,-4),
-                                          child: Text('\$5.99',
-                                              style: TextStyle(color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'FjallaOne',
-                                                  fontSize: 104
-                                              )),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                  outer: [
-                                    Column(
-                                      children: [
-                                        TiltParallax(
-                                          size: Offset(2,-5),
-                                          child: Text('MIX&', style: TextStyle(color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'FjallaOne',
-                                              fontSize: 105
-                                          )),
-                                        ),
-                                        TiltParallax(
-                                          size: Offset(2,-5),
-                                          child: Text('MATCH!', style: TextStyle(color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'FjallaOne',
-                                              fontSize: 105
-                                          )),
-                                        ),
-                                        TiltParallax(
-                                          size: Offset(2,-5),
-                                          child: Text('\$5.99', style: TextStyle(color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'FjallaOne',
-                                              fontSize: 105
-                                          )),
-                                        ),
-                                      ],
-                                    )
-                                  ]
-                              ),
-                              child:  const SizedBox(width: 300, height: 300, ),
+                              child: Image.asset('images/price_image.png'),
                             ),
                           ),
                         ),

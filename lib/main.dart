@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'animation_with_images.dart';
-import 'circular_motion.dart';
 import 'multiple_animation.dart';
 
 void main() {
